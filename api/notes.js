@@ -6,11 +6,18 @@ const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 
 notes.get("/", (req, res) => {
+  fs.readFile(
+    path.join(__dirname, "../db/db.json"),
+    "utf8",
+    function (err, data) {
+      res.json(JSON.parse(data));
+      // Display the file content
+    }
+  );
   //   res.send(path.join(__dirname, "../db/db.json"));
-  const newDB = fs.readFileSync(path.join(__dirname, "../db/db.json"), "utf-8");
-  console.log(newDB);
+  // const newDB = fs.readFileSync(path.join(__dirname, "../db/db.json"), "utf-8");
+  // console.log(newDB);
   // res.json(path.join(__dirname, "/db/db.json"));
-  res.json(JSON.parse(newDB));
 });
 
 notes.post("/", (req, res) => {
