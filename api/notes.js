@@ -41,15 +41,16 @@ notes.post("/", (req, res) => {
 
 notes.delete("/:id", (req, res) => {
   let result = db.filter((el) => el.id !== req.params.id);
-  writeToFile(path.join(__dirname, "../db/db.json"), result);
-  readFromFile(path.join(__dirname, "../db/db.json")).then((result) =>
-    res.json(JSON.parse(result))
-  );
-  // fs.writeFileSync(
-  //   path.join(__dirname, "../db/db.json"),
-  //   JSON.stringify(result)
+  // writeToFile(path.join(__dirname, "../db/db.json"), result);
+
+  // readFromFile(path.join(__dirname, "../db/db.json")).then((result) =>
+  //   res.json(JSON.parse(result))
   // );
-  // res.json(result);
+  fs.writeFileSync(
+    path.join(__dirname, "../db/db.json"),
+    JSON.stringify(result)
+  );
+  res.json(result);
 });
 
 module.exports = notes;
