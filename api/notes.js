@@ -1,23 +1,18 @@
 const notes = require("express").Router();
 const path = require("path");
+const {
+  readFromFile,
+  writeToFile,
+  readAndAppend,
+} = require("../utilities/fsUtils");
 
 let db = require("../db/db.json");
 const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 
 notes.get("/", (req, res) => {
-  fs.readFile(
-    path.join(__dirname, "../db/db.json"),
-    "utf8",
-    function (err, data) {
-      res.json(JSON.parse(data));
-      // Display the file content
-    }
-  );
-  //   res.send(path.join(__dirname, "../db/db.json"));
-  // const newDB = fs.readFileSync(path.join(__dirname, "../db/db.json"), "utf-8");
-  // console.log(newDB);
-  // res.json(path.join(__dirname, "/db/db.json"));
+  const newDB = fs.readFileSync(path.join(__dirname, "../db/db.json"), "utf-8");
+  res.json(JSON.parse(newDB));
 });
 
 notes.post("/", (req, res) => {
@@ -27,11 +22,13 @@ notes.post("/", (req, res) => {
     title: title,
     text: text,
   };
-  const noteList = [...db, note];
-  fs.writeFileSync(
-    path.join(__dirname, "../db/db.json"),
-    JSON.stringify(noteList)
-  );
+  readAndAppend(note, path.join(__dirname, "../db/db.json"));
+  // const noteList = [...db, note];
+  // fs.writeFileSync(
+  //   path.join(__dirname, "../db/db.json"),
+  //   JSON.stringify(noteList)
+  // );
+
   let updatedDB = fs.readFileSync(
     path.join(__dirname, "../db/db.json"),
     "utf-8"
