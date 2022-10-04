@@ -55,7 +55,7 @@ notes.delete("/:id", (req, res) => {
     if (err) throw err;
     let notes = JSON.parse(data);
     //Delete notes using a forEach method to filter a new note array
-    let result = db.filter((el) => el.id !== req.params.id);
+    let result = notes.filter((el) => el.id !== req.params.id);
     //Once new note is deleted, revert object back to string and write it to db.json
     fs.writeFile("./db/db.json", JSON.stringify(result), (err, data) => {
       res.json(notes);
