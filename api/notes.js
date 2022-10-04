@@ -32,7 +32,7 @@ notes.delete("/:id", (req, res) => {
   fs.readFile("./db/db.json", "utf8", (err, data) => {
     if (err) throw err;
     let result = JSON.parse(data).filter((el) => el.id !== req.params.id);
-    fs.writeFile("./db/db.json", JSON.stringify(result), (err) => {
+    fs.writeFile("./db/db.json", JSON.stringify(result), (err, data) => {
       res.json(result);
     });
   });
