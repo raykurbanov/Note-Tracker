@@ -40,22 +40,23 @@ notes.post("/", (req, res) => {
 });
 
 notes.delete("/:id", (req, res) => {
-  fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
-    let result = data.filter((el) => el.id !== req.params.id);
-    fs.writeFile(
-      path.join(__dirname, "../db/db.json"),
-      JSON.stringify(result, null, 4),
-      (err, data) => {
-        console.log("File was written");
-      }
-    );
-  });
-
   // writeToFile(path.join(__dirname, "../db/db.json"), result);
 
   // readFromFile(path.join(__dirname, "../db/db.json")).then((result) =>
   //   res.json(JSON.parse(result))
   // );
+
+  fs.readFile("./db/db.json", "utf8", (err, data) => {
+    if (err) throw err;
+    let notes = JSON.parse(data);
+    //Delete notes using a forEach method to filter a new note array
+    let result = db.filter((el) => el.id !== req.params.id);
+    //Once new note is deleted, revert object back to string and write it to db.json
+    fs.writeFile("./db/db.json", JSON.stringify(result), (err, data) => {
+      res.json(notes);
+      console.info("Successfully delete notes!");
+    });
+  });
   // fs.writeFileSync(
   //   path.join(__dirname, "../db/db.json"),
   //   JSON.stringify(result)
